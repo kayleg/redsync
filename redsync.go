@@ -9,6 +9,10 @@ type Redsync struct {
 
 // New creates and returns a new Redsync instance from given Redis connection pools.
 func New(pools []Pool) *Redsync {
+	for _, pool := range pools {
+		deleteScript.Load(pool.Get())
+		touchScript.Load(pool.Get())
+	}
 	return &Redsync{
 		pools: pools,
 	}
